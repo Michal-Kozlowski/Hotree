@@ -1,0 +1,43 @@
+@mixin media-breakpoint-up($breakpoint) {
+  @if map-has-key($grid-breakpoints, $breakpoint) {
+    @media (min-width: #{map-get($grid-breakpoints, $breakpoint)}) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$grid-breakpoints}`. "
+      + "Please make sure it is defined in `$grid-breakpoints` map.";
+  }
+}
+
+@mixin media-breakpoint-down($breakpoint) {
+  @if map-has-key($grid-breakpoints, $breakpoint) {
+    @media (max-width: #{map-get($grid-breakpoints, $breakpoint) - 1}) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$grid-breakpoints}`. "
+      + "Please make sure it is defined in `$grid-breakpoints` map.";
+  }
+}
+
+@mixin media-vertical-breakpoint-up($breakpoint) {
+  @if map-has-key($grid-vertical-breakpoints, $breakpoint) {
+    @media (min-height: #{map-get($grid-vertical-breakpoints, $breakpoint)}) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$grid-vertical-breakpoints}`. "
+      + "Please make sure it is defined in `$grid-vertical-breakpoints` map.";
+  }
+}
+
+@mixin media-vertical-breakpoint-down($breakpoint) {
+  @if map-has-key($grid-vertical-breakpoints, $breakpoint) {
+    @media (max-height: #{map-get($grid-vertical-breakpoints, $breakpoint) - 1}) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$grid-vertical-breakpoints}`. "
+      + "Please make sure it is defined in `$grid-vertical-breakpoints` map.";
+  }
+}
