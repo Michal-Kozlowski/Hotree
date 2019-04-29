@@ -28,7 +28,7 @@ export default {
   &__title {
     color: $white;
     line-height: 36px;
-    font-weight: 200;
+    font-weight: 100;
     padding: 0 20px;
     margin: 24px 0 20px;
 
