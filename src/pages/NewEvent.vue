@@ -6,7 +6,7 @@
       <Coordinator/>
       <When/>
     </div>
-    <button class="new-event__publish">Publish event</button>
+    <button class="new-event__publish" @click.prevent="sendForm">Publish event</button>
   </div>
 </template>
 
@@ -23,7 +23,16 @@ export default {
     About,
     Coordinator,
     When
-  }
+  },
+  methods: {
+    sendForm() {
+      this.$store.dispatch("collect_data", true).then(() => {
+        this.$store.dispatch("send_form").then(() => {
+          this.$store.dispatch("collect_data", false);
+        })
+      });
+    },
+  },
 }
 </script>
 

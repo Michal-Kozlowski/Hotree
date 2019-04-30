@@ -7,9 +7,8 @@
           Responsible
           <span class="form__required">*</span>
         </label>
-        <select id="responsible" v-model="coordinator.responsible" required>
-          <option disabled value>Select employee</option>
-          <option v-for="employee in employes" :key="employee.id" :value="employee.id">{{employee.name}} - {{employee.lastname}}</option>
+        <select id="responsible" v-model="coordinator.id" required>
+          <option v-for="employee in employesSorted" :key="employee.id" :value="employee.id">{{employee.name}} - {{employee.lastname}}</option>
         </select>
       </div>
 
@@ -19,7 +18,7 @@
         </label>
         <input
           v-model="email"
-          type="text"
+          type="email"
           name="email"
           id="email"
           placeholder="Email"
@@ -36,15 +35,37 @@ import employes from './../mocks/employes.json';
 export default {
   name: 'Coordinator',
   data: () => ({
-    employes: employes,
     coordinator: {
-      responsible: 3,
-      email: "",
+      id: 3,
     },
   }),
   computed: {
     email() {
-      return this.employes[this.coordinator.responsible].email;
+      return employes[this.coordinator.id].email;
+    },
+    employesSorted() {
+      const employesList = [...employes];
+      const selected = employesList.splice(this.coordinator.id, 1);
+      return [...selected, ...employesList];
+    },
+    collectData() {
+      return this.$store.getters.collectData;
+    },
+  },
+  watch: {
+    collectData(val) {
+      if (val) {
+        this.storeData();
+      }
+    },
+  },
+  methods: {
+    storeData() {
+      const data = {
+        id: this.coordinator.id,
+        email: employes[this.coordinator.id].email,
+      };
+      this.$store.dispatch("set_coordinator", data);
     },
   },
 };
