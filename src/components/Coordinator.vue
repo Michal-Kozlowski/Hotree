@@ -7,9 +7,10 @@
           Responsible
           <span class="form__required">*</span>
         </label>
-        <select id="responsible" v-model="coordinator.id" required>
-          <option v-for="employee in employesSorted" :key="employee.id" :value="employee.id">{{employee.name}} - {{employee.lastname}}</option>
+        <select id="responsible" v-model="id" required>
+          <option v-for="employee in employesSorted" :key="employee.id" :value="employee.id">{{employee.name}} {{employee.lastname}}</option>
         </select>
+        <div v-if="!$v.id.required && sendData" class="error__message">This cannot be empty</div>
       </div>
 
       <div class="coordinator__form-field coordinator__form-field--text">
@@ -24,6 +25,7 @@
           placeholder="Email"
           required
         >
+        <div v-if="!$v.email.email && sendData" class="error__message">Please provide valid email</div>
       </div>
     </form>
   </div>
@@ -31,21 +33,22 @@
 
 <script>
 import employes from './../mocks/employes.json';
+import { required, email } from 'vuelidate/lib/validators';
 
 export default {
   name: 'Coordinator',
   data: () => ({
-    coordinator: {
-      id: 3,
-    },
+    id: 3,
+    sendData: false,
+    formValid: false,
   }),
   computed: {
     email() {
-      return employes[this.coordinator.id].email;
+      return employes[this.id].email;
     },
     employesSorted() {
       const employesList = [...employes];
-      const selected = employesList.splice(this.coordinator.id, 1);
+      const selected = employesList.splice(this.id, 1);
       return [...selected, ...employesList];
     },
     collectData() {
@@ -59,12 +62,25 @@ export default {
       }
     },
   },
+  validations: {
+    id: {
+      required,
+    },
+    email: {
+      required,
+      email,
+    },
+  },
   methods: {
     storeData() {
+      this.$v.id.$touch();
+      this.$v.email.$touch()
+      this.formValid = !this.$v.$invalid;
       const data = {
-        id: this.coordinator.id,
-        email: employes[this.coordinator.id].email,
+        ...this,
+        email: employes[this.id].email,
       };
+      this.sendData = true;
       this.$store.dispatch("set_coordinator", data);
     },
   },

@@ -8,20 +8,22 @@
           <span class="form__required">*</span>
         </label>
         <input
-          v-model="when.date"
+          v-model="date"
           type="date"
           name="start"
           id="start"
+          @input="$v.date.$touch()"
           placeholder="dd/mm/yyyy"
           :min="dateToday"
           required
         >
         <span>at</span>
         <input type="time" id="time" name="time" v-model="timeFunction" required>
-        <input type="radio" id="am" name="am" value="am" v-model="when.timeAffix">
+        <input type="radio" id="am" name="am" value="am" v-model="timeAffix">
         <label for="am">am</label>
-        <input type="radio" id="pm" name="pm" value="pm" v-model="when.timeAffix">
+        <input type="radio" id="pm" name="pm" value="pm" v-model="timeAffix">
         <label for="pm">pm</label>
+        <div v-if="!($v.date.required && $v.time.required) && sendData" class="error__message">When does the event start?</div>
       </div>
 
       <div class="when__form-field when__form-field--number">
@@ -29,7 +31,7 @@
           Duration
         </label>
         <input
-          v-model="when.duration"
+          v-model="duration"
           type="text"
           name="duration"
           id="duration"
@@ -42,15 +44,17 @@
 </template>
 
 <script>
+import { required } from 'vuelidate/lib/validators';
+
 export default {
-  name: 'When',
+  name: "When",
   data: () => ({
-    when: {
-      date: '',
-      time: '',
-      timeAffix: 'am',
-      duration: null,
-    },
+    date: "",
+    time: "",
+    timeAffix: "am",
+    duration: null,
+    sendData: false,
+    formValid: false,
   }),
   computed: {
     dateToday() {
@@ -65,7 +69,8 @@ export default {
         return this.getFormattedTime();
       },
       set(newValue) {
-        this.when.time = this.getFormattedTime(newValue);
+        this.$v.time.$touch();
+        this.time = this.getFormattedTime(newValue);
       }
     },
     collectData() {
@@ -73,19 +78,19 @@ export default {
     },
   },
   watch: {
-    "when.timeAffix"(val) {
-      let hh = this.when.time.substring(0, 2);
-      const mm = this.when.time.substring(3, 5);
+    "timeAffix"(val) {
+      let hh = this.time.substring(0, 2);
+      const mm = this.time.substring(3, 5);
       if (val === "am") {
         if (hh > 21) {
           hh -= 12;
         } else if (hh > 12) {
           hh = `0${hh - 12}`;
         }
-        this.when.time = `${hh}:${mm}`;
+        this.time = `${hh}:${mm}`;
       }
       if (val === "pm") {
-        this.when.time = `${Number(hh) + 12}:${mm}`;
+        this.time = `${Number(hh) + 12}:${mm}`;
       }
     },
     collectData(val) {
@@ -94,9 +99,17 @@ export default {
       }
     },
   },
+  validations: {
+    date: {
+      required,
+    },
+    time: {
+      required,
+    },
+  },
   methods: {
     getFormattedTime(time) {
-      const timeToFormat = time ? time : this.when.time;
+      const timeToFormat = time ? time : this.time;
       let hh = timeToFormat.substring(0, 2);
       const mm = timeToFormat.substring(3, 5);
       if (hh > 21) {
@@ -104,13 +117,15 @@ export default {
       } else if (hh > 12) {
         hh = `0${hh - 12}`;
       }
-      if (time && this.when.timeAffix === "pm") {
+      if (time && this.timeAffix === "pm") {
         hh = Number(hh) + 12;
       }
       return `${hh}:${mm}`;
     },
     storeData() {
-      this.$store.dispatch("set_when", this.when);
+      this.sendData = true;
+      this.formValid = !this.$v.$invalid;
+      this.$store.dispatch("set_when", this);
     },
   },
 }

@@ -19,6 +19,11 @@ export default new Vuex.Store({
         id: "",
       },
     },
+    validation: {
+      about: false,
+      coordinator: false,
+      when: false,
+    },
     collectData: false,
   },
   mutations: {
@@ -29,14 +34,17 @@ export default new Vuex.Store({
       store.formData.paid_event = data.payment;
       store.formData.event_fee = data.fee;
       store.formData.reward = data.reward;
+      store.validation.about = data.formValid;
     },
     SET_COORDINATOR(store, data) {
       store.formData.coordinator.email = data.email;
       store.formData.coordinator.id = data.id;
+      store.validation.coordinator = data.formValid;
     },
     SET_WHEN(store, data) {
       store.formData.duration = data.duration * 60 * 60;
       store.formData.date = `${data.date}T${data.time}`;
+      store.validation.when = data.formValid;
     },
     COLLECT_DATA(store, data) {
       store.collectData = data;
@@ -56,7 +64,14 @@ export default new Vuex.Store({
       commit('COLLECT_DATA', data);
     },
     send_form() {
-      console.log(this.state.formData);
+      if (
+        this.state.validation.about &&
+        this.state.validation.coordinator &&
+        this.state.validation.when
+      ) {
+        // this makes object a little bit more readable in the console
+        console.log(JSON.parse(JSON.stringify(this.state.formData)));
+      }
     },
   },
   getters: {
