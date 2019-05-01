@@ -1,0 +1,189 @@
+.card {
+  background: $white;
+  box-shadow: 0 0 10px $shadow;
+  max-width: 800px;
+  padding: 18px 20px;
+  margin: 0 auto 24px;
+  border-radius: 4px;
+  
+  @include media-breakpoint-up(sml) {
+    padding: 18px 40px;
+  }
+
+  &__header {
+    color: $header-text;
+    font-size: 22px;
+    margin-bottom: 30px;
+    position: relative;
+
+    &::after {
+      content: '';
+      background: $shadow;
+      height: 1px;
+      width: 100%;
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+    }
+  }
+
+  &__label {
+    text-transform: uppercase;
+    font-size: 13px;
+    line-height: 35px;
+    color: $label-text;
+    display: inline-block;
+    width: 120px;
+    align-self: flex-start;
+
+    &--error {
+      color: $error;
+    }
+  }
+
+  &__input {
+    border: 1px solid $shadow;
+    width: 100%;
+    padding: 8px 12px;
+    color: $text;
+    font-size: 15px;
+    border-radius: 2px;
+    resize: none;
+
+    @include media-breakpoint-up(sml) {
+      width: calc(100% - 280px);
+    }
+
+    &::placeholder {
+      color: $input-placeholder;
+    }
+
+    &--error {
+      border-color: $error;
+    }
+
+    &--group {
+      padding: 0;
+      border-width: 0;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+
+      @include media-breakpoint-up(sml) {
+        flex-wrap: nowrap;
+      }
+
+      * {
+        margin-right: 15px;
+      }
+    }
+
+    &--short {
+      width: 100px;
+    }
+
+    &--date {
+      width: 180px;
+      padding: 8px 4px 8px 8px;
+    }
+
+    &--time {
+      width: 100px;
+      padding: 8px 4px 8px 8px;
+    }
+  }
+
+  &__clear {
+    color: $input-placeholder;
+  }
+
+  &__radio {
+    appearance: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    margin-left: 0;
+    margin-bottom: 11px;
+    border: 1px solid $label-text;
+    transition: $transition-time;
+    outline: none;
+    margin-right: 5px;
+    position: relative;
+    top: 4px;
+    flex-shrink: 0;
+    cursor: pointer;
+    box-shadow: 0 0 0 2.5px $white inset;
+
+    &:checked {
+      background: $label-text;
+    }
+  }
+
+  &__select {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  &__select-triangle {
+    position: absolute;
+    right: 10px;
+    top: 52px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid $label-text;
+    pointer-events: none;
+
+    @include media-breakpoint-up(sml) {
+      right: 175px;
+      top: 16px;
+    }
+  }
+
+  &__radio-label {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__info {
+    font-size: 9px;
+    font-style: italic;
+    font-weight: 100;
+    color: $info;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: -25px;
+
+    @include media-breakpoint-up(xsm) {
+      font-size: 11px;
+    }
+
+    @include media-breakpoint-up(sml) {
+      width: calc(100% - 280px);
+      margin-left: 120px;
+    }
+  }
+
+  &__field {
+    margin-bottom: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    @include media-breakpoint-up(sml) {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    &--with-info {
+      margin-bottom: 32px;
+    }
+  }
+
+  &__explain {
+    margin-left: 12px;
+  }
+}

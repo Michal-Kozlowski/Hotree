@@ -25,6 +25,7 @@ export default new Vuex.Store({
       when: false,
     },
     collectData: false,
+    success: false,
   },
   mutations: {
     SET_ABOUT(store, data) {
@@ -49,6 +50,9 @@ export default new Vuex.Store({
     COLLECT_DATA(store, data) {
       store.collectData = data;
     },
+    SUCCESS(store) {
+      store.success = true;
+    },
   },
   actions: {
     set_about({ commit }, data) {
@@ -63,12 +67,13 @@ export default new Vuex.Store({
     collect_data({ commit }, data) {
       commit('COLLECT_DATA', data);
     },
-    send_form() {
+    send_form({ commit }) {
       if (
         this.state.validation.about &&
         this.state.validation.coordinator &&
         this.state.validation.when
       ) {
+        commit('SUCCESS');
         // this makes object a little bit more readable in the console
         console.log(JSON.parse(JSON.stringify(this.state.formData)));
       }
@@ -76,5 +81,6 @@ export default new Vuex.Store({
   },
   getters: {
     collectData: (state) => state.collectData,
+    success: (state) => state.success,
   }
 });

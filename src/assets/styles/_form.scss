@@ -3,5 +3,8 @@
 
   &__required {
     color: $required;
+    font-size: 8px;
+    position: relative;
+    bottom: 4px;
   }
 }

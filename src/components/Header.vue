@@ -17,7 +17,7 @@ export default {
 
 .header {
   background: $header;
-  height: 80px;
+  height: 95px;
   border-top: 15px solid $header-top;
 
   &__container {
@@ -26,11 +26,12 @@ export default {
   }
 
   &__title {
-    color: $white;
+    font-size: 34px;
     line-height: 36px;
     font-weight: 100;
+    color: $white;
     padding: 0 20px;
-    margin: 24px 0 20px;
+    margin: 25px 0 0;
 
     @include media-breakpoint-up(sm) {
       padding: 0 120px;
